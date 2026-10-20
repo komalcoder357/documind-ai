@@ -1,0 +1,3 @@
+-r requirements.txt
+psycopg[binary]>=3.1
+# optional semantic embeddings (large download): sentence-transformers

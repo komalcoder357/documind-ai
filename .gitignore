@@ -1,0 +1,16 @@
+.env
+__pycache__/
+*.db
+storage/
+.pytest_cache/
+node_modules/
+dist/
+
+# Local backups
+backup_*/
+.env.before-sbert
+
+
+# Temporary backup files
+*.bak
+

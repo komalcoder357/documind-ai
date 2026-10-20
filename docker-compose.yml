@@ -1,0 +1,23 @@
+# NOTE: written but not executed in the build environment (no Docker available). Review before use.
+services:
+  db:
+    image: postgres:16
+    environment: { POSTGRES_USER: documind, POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set in .env}, POSTGRES_DB: documind }
+    volumes: [dbdata:/var/lib/postgresql/data]
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://documind:${POSTGRES_PASSWORD}@db:5432/documind
+      STORAGE_DIR: /data/storage
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080}
+      LLM_PROVIDER: ${LLM_PROVIDER:-none}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+    volumes: [files:/data/storage]
+    depends_on: [db]
+  frontend:
+    build: ./frontend
+    ports: ["8080:80"]
+    depends_on: [backend]
+volumes: { dbdata: {}, files: {} }
